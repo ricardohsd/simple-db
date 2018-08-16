@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"log"
+	"os"
+	"os/signal"
 
 	"github.com/ricardohsd/simple-db/server"
 )
@@ -17,10 +19,18 @@ func init() {
 func main() {
 	log.Printf("Starting server on address %v", *address)
 
+	stop := make(chan os.Signal)
+
+	signal.Notify(stop, os.Interrupt)
+
 	s, err := server.New(address)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	s.HandleConnections()
+	go s.HandleConnections()
+
+	<-stop
+
+	log.Println("Quitting")
 }

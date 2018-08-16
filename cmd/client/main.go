@@ -57,7 +57,7 @@ func (c *client) HandleConnection() {
 			c.conn.Write(text)
 			readMessage(resp)
 		case io.EOF:
-			os.Exit(0)
+			os.Exit(1)
 		default:
 			log.Fatalf("Error %v", err)
 		}
@@ -72,7 +72,7 @@ func readMessage(resp *bufio.Reader) {
 		break
 	case io.EOF:
 		log.Println("EOF. Closing connection")
-		return
+		os.Exit(1)
 	default:
 		log.Printf("Error: %v", err)
 	}
