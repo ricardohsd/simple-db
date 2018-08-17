@@ -12,13 +12,13 @@ import (
 )
 
 type Server struct {
-	address *string
+	address string
 	ln      net.Listener
 	storage storage.DB
 }
 
-func New(address *string) (*Server, error) {
-	ln, err := net.Listen("tcp", *address)
+func New(address string) (*Server, error) {
+	ln, err := net.Listen("tcp", address)
 	if err != nil {
 		return nil, errors.Wrap(err, "starting server failed on address")
 	}

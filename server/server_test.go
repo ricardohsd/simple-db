@@ -34,7 +34,7 @@ func newTestServer(address string, db *fakeDB) (*Server, error) {
 		return nil, err
 	}
 
-	return &Server{&address, ln, db}, nil
+	return &Server{address, ln, db}, nil
 }
 
 func assertReqResp(t *testing.T, address string, messages []string) error {

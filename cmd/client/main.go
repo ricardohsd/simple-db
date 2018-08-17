@@ -10,15 +10,19 @@ import (
 	"os"
 )
 
-var address *string
+var host *string
+var port *string
 
 func init() {
-	address = flag.String("port", "127.0.0.1:3000", "Port to create connection")
+	host = flag.String("host", "127.0.0.1", "Host to connect")
+	port = flag.String("port", "3000", "Port to create connection")
 	flag.Parse()
 }
 
 func main() {
-	cl, err := NewClient(*address)
+	address := net.JoinHostPort(*host, *port)
+
+	cl, err := NewClient(address)
 	if err != nil {
 		log.Fatalf("Error: %v", err)
 	}

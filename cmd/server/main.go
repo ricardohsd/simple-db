@@ -3,21 +3,24 @@ package main
 import (
 	"flag"
 	"log"
+	"net"
 	"os"
 	"os/signal"
 
 	"github.com/ricardohsd/simple-db/server"
 )
 
-var address *string
+var port *string
 
 func init() {
-	address = flag.String("port", ":3000", "Port to start server")
+	port = flag.String("port", "3000", "Port to start server")
 	flag.Parse()
 }
 
 func main() {
-	log.Printf("Starting server on address %v", *address)
+	address := net.JoinHostPort("127.0.0.1", *port)
+
+	log.Printf("Starting server on address %v", address)
 
 	stop := make(chan os.Signal)
 
