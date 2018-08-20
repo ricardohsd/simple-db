@@ -8,32 +8,32 @@ import (
 )
 
 func TestExecute(t *testing.T) {
-	st := &storage{
+	kv := &kv{
 		db:       make(map[string]string),
 		protocol: &protocol.KV{},
 	}
 
-	resp, err := st.Execute("GET name")
+	resp, err := kv.Execute("GET name")
 	assert.NotNil(t, err, "key not found")
 	assert.Equal(t, "", resp)
 
-	resp, err = st.Execute("SET name john")
+	resp, err = kv.Execute("SET name john")
 	assert.Nil(t, err)
 	assert.Equal(t, "OK", resp)
 
-	resp, err = st.Execute("GET name")
+	resp, err = kv.Execute("GET name")
 	assert.Nil(t, err)
 	assert.Equal(t, "john", resp)
 
-	resp, err = st.Execute("DEL name")
+	resp, err = kv.Execute("DEL name")
 	assert.Nil(t, err)
 	assert.Equal(t, "OK", resp)
 
-	resp, err = st.Execute("DEL name")
+	resp, err = kv.Execute("DEL name")
 	assert.NotNil(t, err, "key not found")
 	assert.Equal(t, "", resp)
 
-	resp, err = st.Execute("")
+	resp, err = kv.Execute("")
 	assert.Equal(t, protocol.ErrMalformedCommand, err)
 	assert.Equal(t, "", resp)
 }

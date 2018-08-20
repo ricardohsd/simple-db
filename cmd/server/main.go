@@ -27,8 +27,8 @@ func main() {
 
 	signal.Notify(stop, os.Interrupt)
 
-	storage := storage.New()
-	s, err := server.New(address, storage)
+	kvs := storage.NewKV()
+	s, err := server.New(address, kvs)
 	if err != nil {
 		log.Fatalln(err)
 	}

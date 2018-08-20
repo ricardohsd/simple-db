@@ -8,21 +8,21 @@ import (
 	"github.com/ricardohsd/simple-db/protocol"
 )
 
-type storage struct {
+type kv struct {
 	db       map[string]string
 	protocol protocol.Protocol
 }
 
-// New returns a key value storage
-func New() *storage {
+// NewKV returns a key value storage
+func NewKV() *kv {
 	p := &protocol.KV{}
-	return &storage{
+	return &kv{
 		db:       make(map[string]string),
 		protocol: p,
 	}
 }
 
-func (s *storage) Execute(message string) (string, error) {
+func (s *kv) Execute(message string) (string, error) {
 	cmd, error := s.protocol.Parse(message)
 	if error != nil {
 		return "", error
@@ -40,7 +40,7 @@ func (s *storage) Execute(message string) (string, error) {
 	}
 }
 
-func (s *storage) set(cmd *protocol.Command) (string, error) {
+func (s *kv) set(cmd *protocol.Command) (string, error) {
 	log.Printf("Processing SET %v, %v\n", cmd.Key, cmd.Value)
 
 	s.db[cmd.Key] = cmd.Value
@@ -48,7 +48,7 @@ func (s *storage) set(cmd *protocol.Command) (string, error) {
 	return "OK", nil
 }
 
-func (s *storage) get(cmd *protocol.Command) (string, error) {
+func (s *kv) get(cmd *protocol.Command) (string, error) {
 	log.Printf("Processing GET %v\n", cmd.Key)
 
 	m, ok := s.db[cmd.Key]
@@ -59,7 +59,7 @@ func (s *storage) get(cmd *protocol.Command) (string, error) {
 	return m, nil
 }
 
-func (s *storage) del(cmd *protocol.Command) (string, error) {
+func (s *kv) del(cmd *protocol.Command) (string, error) {
 	log.Printf("Processing DEL %v\n", cmd.Key)
 
 	_, ok := s.db[cmd.Key]
