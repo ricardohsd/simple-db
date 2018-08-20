@@ -13,7 +13,9 @@ type storage struct {
 	protocol protocol.Protocol
 }
 
-func New(p protocol.Protocol) *storage {
+// New returns a key value storage
+func New() *storage {
+	p := &protocol.KV{}
 	return &storage{
 		db:       make(map[string]string),
 		protocol: p,
@@ -28,17 +30,17 @@ func (s *storage) Execute(message string) (string, error) {
 
 	switch cmd.Instruction {
 	case "GET":
-		return s.Get(cmd)
+		return s.get(cmd)
 	case "SET":
-		return s.Set(cmd)
+		return s.set(cmd)
 	case "DEL":
-		return s.Del(cmd)
+		return s.del(cmd)
 	default:
 		return "", errors.Wrap(ErrWrongInstruction, cmd.Instruction)
 	}
 }
 
-func (s *storage) Set(cmd *protocol.Command) (string, error) {
+func (s *storage) set(cmd *protocol.Command) (string, error) {
 	log.Printf("Processing SET %v, %v\n", cmd.Key, cmd.Value)
 
 	s.db[cmd.Key] = cmd.Value
@@ -46,7 +48,7 @@ func (s *storage) Set(cmd *protocol.Command) (string, error) {
 	return "OK", nil
 }
 
-func (s *storage) Get(cmd *protocol.Command) (string, error) {
+func (s *storage) get(cmd *protocol.Command) (string, error) {
 	log.Printf("Processing GET %v\n", cmd.Key)
 
 	m, ok := s.db[cmd.Key]
@@ -57,7 +59,7 @@ func (s *storage) Get(cmd *protocol.Command) (string, error) {
 	return m, nil
 }
 
-func (s *storage) Del(cmd *protocol.Command) (string, error) {
+func (s *storage) del(cmd *protocol.Command) (string, error) {
 	log.Printf("Processing DEL %v\n", cmd.Key)
 
 	_, ok := s.db[cmd.Key]

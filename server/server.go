@@ -7,7 +7,6 @@ import (
 	"net"
 
 	"github.com/pkg/errors"
-	"github.com/ricardohsd/simple-db/protocol"
 	"github.com/ricardohsd/simple-db/storage"
 )
 
@@ -17,15 +16,13 @@ type Server struct {
 	storage storage.Engine
 }
 
-func New(address string) (*Server, error) {
+func New(address string, storage storage.Engine) (*Server, error) {
 	ln, err := net.Listen("tcp", address)
 	if err != nil {
 		return nil, errors.Wrap(err, "starting server failed on address")
 	}
 
-	s := storage.New(&protocol.KV{})
-
-	return &Server{address, ln, s}, nil
+	return &Server{address, ln, storage}, nil
 }
 
 func (s *Server) HandleConnections() {

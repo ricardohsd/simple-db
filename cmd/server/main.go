@@ -8,6 +8,7 @@ import (
 	"os/signal"
 
 	"github.com/ricardohsd/simple-db/server"
+	"github.com/ricardohsd/simple-db/storage"
 )
 
 var port *string
@@ -26,7 +27,8 @@ func main() {
 
 	signal.Notify(stop, os.Interrupt)
 
-	s, err := server.New(address)
+	storage := storage.New()
+	s, err := server.New(address, storage)
 	if err != nil {
 		log.Fatalln(err)
 	}
