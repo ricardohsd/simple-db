@@ -43,7 +43,7 @@ func (s *kv) Execute(message string) (string, error) {
 func (s *kv) set(cmd *protocol.Command) (string, error) {
 	log.Printf("Processing SET %v, %v\n", cmd.Key, cmd.Value)
 
-	s.db[cmd.Key] = cmd.Value
+	s.db[cmd.Key] = cmd.Value.(string)
 
 	return "OK", nil
 }

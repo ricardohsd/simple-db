@@ -19,7 +19,7 @@ func TestRWindowExecute(t *testing.T) {
 
 	resp, err = rw.Execute("RWSET transactions notANumber")
 	assert.Equal(t, err.Error(), "value must be a valid integer")
-	assert.Equal(t, "ERROR", resp)
+	assert.Equal(t, "", resp)
 
 	resp, err = rw.Execute("RWSET transactions 60")
 	assert.Nil(t, err)
@@ -35,7 +35,7 @@ func TestRWindowExecute(t *testing.T) {
 
 	resp, err = rw.Execute("RWADD transactions notANumber")
 	assert.Equal(t, err.Error(), "value must be a valid float")
-	assert.Equal(t, "ERROR", resp)
+	assert.Equal(t, "", resp)
 
 	resp, err = rw.Execute("RWADD other 10.30")
 	assert.NotNil(t, err, "key not found")

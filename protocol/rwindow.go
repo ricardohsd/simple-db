@@ -1,6 +1,7 @@
 package protocol
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/pkg/errors"
@@ -56,7 +57,12 @@ func (r *RWindow) addCommand(key string, value string) (*Command, error) {
 		return nil, ErrMalformedCommand
 	}
 
-	return &Command{"RWADD", key, value}, nil
+	val, err := strconv.ParseFloat(value, 64)
+	if err != nil {
+		return nil, errors.New("value must be a valid float")
+	}
+
+	return &Command{"RWADD", key, val}, nil
 }
 
 func (r *RWindow) setCommand(key string, value string) (*Command, error) {
@@ -64,7 +70,12 @@ func (r *RWindow) setCommand(key string, value string) (*Command, error) {
 		return nil, ErrMalformedCommand
 	}
 
-	return &Command{"RWSET", key, value}, nil
+	seconds, err := strconv.Atoi(value)
+	if err != nil {
+		return nil, errors.New("value must be a valid integer")
+	}
+
+	return &Command{"RWSET", key, seconds}, nil
 }
 
 func (r *RWindow) delCommand(key string, value string) (*Command, error) {

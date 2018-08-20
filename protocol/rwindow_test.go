@@ -16,9 +16,13 @@ func TestRWindowParse(t *testing.T) {
 	_, err = r.Parse("RWAVG ")
 	assert.Equal(t, ErrMalformedCommand, err)
 
+	cmd, err = r.Parse("RWSET transactions notANumber")
+	assert.Equal(t, "value must be a valid integer", err.Error())
+	assert.Nil(t, cmd)
+
 	cmd, err = r.Parse("RWSET transactions 10")
 	assert.Nil(t, err)
-	assert.Equal(t, &Command{"RWSET", "transactions", "10"}, cmd)
+	assert.Equal(t, &Command{"RWSET", "transactions", 10}, cmd)
 
 	_, err = r.Parse("RWSET transactions")
 	assert.Equal(t, ErrMalformedCommand, err)
@@ -28,7 +32,11 @@ func TestRWindowParse(t *testing.T) {
 
 	cmd, err = r.Parse("RWADD transactions 10.20")
 	assert.Nil(t, err)
-	assert.Equal(t, &Command{"RWADD", "transactions", "10.20"}, cmd)
+	assert.Equal(t, &Command{"RWADD", "transactions", 10.20}, cmd)
+
+	cmd, err = r.Parse("RWADD transactions notANumber")
+	assert.Equal(t, "value must be a valid float", err.Error())
+	assert.Nil(t, cmd)
 
 	cmd, err = r.Parse("RWDEL transactions")
 	assert.Nil(t, err)

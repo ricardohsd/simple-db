@@ -3,7 +3,6 @@ package storage
 import (
 	"fmt"
 	"log"
-	"strconv"
 	"time"
 
 	"github.com/pkg/errors"
@@ -59,10 +58,7 @@ func (r *rwindow) set(cmd *protocol.Command) (string, error) {
 		return "NACK", nil
 	}
 
-	seconds, err := strconv.Atoi(cmd.Value)
-	if err != nil {
-		return "ERROR", errors.New("value must be a valid integer")
-	}
+	seconds := cmd.Value.(int)
 
 	rw, err := horus.NewRWindow(time.Duration(seconds)*time.Second, time.Second)
 	if err != nil {
@@ -82,10 +78,7 @@ func (r *rwindow) add(cmd *protocol.Command) (string, error) {
 		return "", fmt.Errorf("key not found")
 	}
 
-	val, err := strconv.ParseFloat(cmd.Value, 64)
-	if err != nil {
-		return "ERROR", errors.New("value must be a valid float")
-	}
+	val := cmd.Value.(float64)
 
 	rw.Add(val)
 

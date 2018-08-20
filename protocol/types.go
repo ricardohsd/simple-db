@@ -5,7 +5,7 @@ package protocol
 type Command struct {
 	Instruction string
 	Key         string
-	Value       string
+	Value       interface{}
 }
 
 // Protocol defines interface for protocol communication
