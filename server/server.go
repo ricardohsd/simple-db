@@ -14,7 +14,7 @@ import (
 type Server struct {
 	address string
 	ln      net.Listener
-	storage storage.DB
+	storage storage.Engine
 }
 
 func New(address string) (*Server, error) {

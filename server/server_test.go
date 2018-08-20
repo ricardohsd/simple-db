@@ -7,7 +7,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ricardohsd/simple-db/protocol"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -72,16 +71,4 @@ type fakeDB struct{}
 
 func (f *fakeDB) Execute(message string) (string, error) {
 	return message, nil
-}
-
-func (f *fakeDB) Set(cmd *protocol.Command) (string, error) {
-	return "", nil
-}
-
-func (f *fakeDB) Get(cmd *protocol.Command) (string, error) {
-	return "", nil
-}
-
-func (f *fakeDB) Del(cmd *protocol.Command) (string, error) {
-	return "", nil
 }
